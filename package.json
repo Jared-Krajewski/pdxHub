@@ -10,6 +10,7 @@
     "clean-dev": "pkill -f 'node .*next dev' || true; pkill -f 'bun run dev' || true; sleep 1; rm -rf .next; bun run dev"
   },
   "dependencies": {
+    "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "lucide-react": "^1.7.0",
