@@ -46,6 +46,42 @@ bun dev            # or: npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+### 4. Run with Docker Compose
+
+All Docker workflows are managed through `make`. Run `make help` from the project root to see available targets.
+
+#### Production container
+
+```bash
+make build   # build the production image
+make run     # start the production container (foreground)
+make up      # build then start in one step
+```
+
+#### Development container with live reload
+
+```bash
+make dev
+```
+
+Starts the dev container in Docker Compose watch mode. Source changes are synced into the container and Next.js hot-reloads. Changes to `package.json` trigger a full image rebuild.
+
+Approximate image sizes:
+
+- `pdx-hub:local` production image ~288 MB
+- `pdx-hub:dev` development image ~1.3 GB (carries full deps + tooling)
+
+Both modes publish the app on [http://localhost:3000](http://localhost:3000) and load `.env.local` automatically when that file exists.
+
+#### Cleanup
+
+| Command        | What it does                                                                                                                                                                         |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `make stop`    | Pause containers without removing them                                                                                                                                               |
+| `make down`    | Remove project containers and network                                                                                                                                                |
+| `make clean`   | Remove containers, network, named volumes, and local images                                                                                                                          |
+| `make clobber` | Everything in `clean`, plus force-removes active BuildKit helper containers and their state volumes, then globally prunes unused Docker images, volumes, networks, and builder cache |
+
 ---
 
 ## Environment Variables
@@ -148,6 +184,11 @@ bun run build      # Production build
 bun run start      # Run production build locally
 bun run lint       # ESLint
 bun run clean-dev  # Kill existing dev server, wipe .next cache, restart
+make up            # Build and start the Dockerized app
+make dev           # Start the live-reload dev container
+make stop          # Stop running containers without removing them
+make clean         # Remove project containers, volumes, and images
+make clobber       # Full Docker cleanup including BuildKit state (global, destructive)
 ```
 
 ---
